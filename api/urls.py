@@ -11,5 +11,4 @@ urlpatterns = [
     path('wallet/<int:pk>/withdraw', views.withdraw),
     path('wallet/<int:pk>/replenish', views.replenish),
     path('wallet/<int:pk>/transfer', views.transfer),
-    # path('wallet/<int:pk>/convert', views.convert)
 ]
