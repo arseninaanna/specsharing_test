@@ -2,9 +2,9 @@ from django.db import models
 
 
 CURRENCY_CHOICES = (
-    ('eu', 'Euro'),
-    ('ru', 'Rubble'),
-    ('us', 'Dollar'),
+    ('EUR', 'Euro'),
+    ('RUB', 'Rubble'),
+    ('USD', 'Dollar'),
 )
 
 
@@ -19,7 +19,7 @@ class User(models.Model):
 class Wallet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     balance = models.FloatField()
-    currency = models.CharField(max_length=2, choices=CURRENCY_CHOICES)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)
 
     def __str__(self):
         return '{} {} {}'.format(self.user, self.currency, self.balance)
