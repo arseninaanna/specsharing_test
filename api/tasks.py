@@ -2,6 +2,7 @@ from celery import shared_task
 from lxml import etree as et
 import requests
 from .models import CurrencyMap
+from django.core.exceptions import FieldDoesNotExist
 
 CURRENCY_STORAGE_URL = "https://www.cbr-xml-daily.ru/daily.xml"
 
@@ -26,9 +27,10 @@ def update_currency():
                 value = child.text
 
         if currency_code and value:
-            currency = CurrencyMap.objects.get(currency_code=currency_code)
-            if currency:
-                currency.value = float(value)
-            else:
-                currency = CurrencyMap(currency_code=currency_code, value=float(value))
+            try:
+                currency = CurrencyMap.objects.get(currency_code=currency_code)
+                if currency:
+                    currency.value = float(value.replace(',', '.'))
+            except Exception:
+                currency = CurrencyMap(currency_code=currency_code, value=float(value.replace(',', '.')))
             currency.save()
