@@ -126,12 +126,13 @@ STATIC_URL = '/static/'
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "core.tasks.sample_task",
-        "schedule": crontab(minute="*/1"),
-    },
+    # "sample_task": {
+    #     "task": "api.tasks.sample_task",
+    #     "schedule": crontab(minute="*"),
+    # },
     "update_currency": {
-        "task": "core.tasks.update_currency",
-        "schedule": crontab(minute="*/1"),
+        "task": "api.tasks.update_currency",
+        # "schedule": crontab(minute="*"),
+        "schedule": 10,  # every 10 seconds
     },
 }

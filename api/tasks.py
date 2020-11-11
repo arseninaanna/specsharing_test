@@ -3,7 +3,6 @@ from lxml import etree as et
 import requests
 from .models import CurrencyMap
 
-
 CURRENCY_STORAGE_URL = "https://www.cbr-xml-daily.ru/daily.xml"
 
 
