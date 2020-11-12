@@ -3,13 +3,16 @@ from rest_framework.views import APIView
 from .models import User, Wallet, CurrencyMap
 from .serialazers import UserSerializer, WalletSerializer
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from django.http import JsonResponse
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from rest_framework.permissions import AllowAny
 
 
 class UserView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         users = User.objects.all()
 
@@ -18,6 +21,8 @@ class UserView(APIView):
 
 
 class WalletView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         wallets = Wallet.objects.all()
 
@@ -26,11 +31,11 @@ class WalletView(APIView):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def login(request):
     email = request.data.get("email")
     password = request.data.get("password")
     user = authenticate(request, email=email, password=password)
-
     if not user:
         message = "There is no such user"
         status = 404
@@ -41,6 +46,7 @@ def login(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def withdraw(request, pk):
     """
     GET params: amount - amount to withdraw in the currency of operated wallet
@@ -63,6 +69,7 @@ def withdraw(request, pk):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def replenish(request, pk):
     """
     GET params: amount - amount to replenish in the currency of operated wallet
@@ -78,6 +85,7 @@ def replenish(request, pk):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def transfer(request, pk):
     """
     Transfer between own wallets
