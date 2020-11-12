@@ -5,6 +5,8 @@ from .serialazers import UserSerializer, WalletSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 
 
 class UserView(APIView):
@@ -21,6 +23,21 @@ class WalletView(APIView):
 
         serializer = WalletSerializer(wallets, many=True)
         return Response({"wallets": serializer.data})
+
+
+@api_view(['POST'])
+def login(request):
+    email = request.data.get("email")
+    password = request.data.get("password")
+    user = authenticate(request, email=email, password=password)
+
+    if not user:
+        message = "There is no such user"
+        status = 404
+        return JsonResponse({'message': message}, status=status)
+
+    token, _ = Token.objects.get_or_create(user_id=user.id)
+    return Response({'token': token.key})
 
 
 @api_view(['GET'])

@@ -1,4 +1,7 @@
 from django.db import models
+from .managers import UserManager
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 
 
 CURRENCY_CHOICES = (
@@ -8,9 +11,25 @@ CURRENCY_CHOICES = (
 )
 
 
-class User(models.Model):
+class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    email = models.EmailField(max_length=254, unique=True)
+    password = models.CharField(max_length=50)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    objects = UserManager()
+
+    groups = None
+    user_permissions = None
+
+    is_staff = True
+
+    @property
+    def is_superuser(self):
+        return self.email == 'a@mail.ru'  # hack for easy development
 
     def __str__(self):
         return '{} {}'.format(self.first_name, self.last_name)

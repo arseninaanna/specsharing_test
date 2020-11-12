@@ -39,8 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'api'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'EXCEPTION_HANDLER': 'web_app.utils.custom_exception_handler'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,3 +143,10 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": 10,  # every 10 seconds
     },
 }
+
+AUTHENTICATION_BACKENDS = [
+    'api.backends.AuthBackend'
+]
+
+AUTH_USER_MODEL = 'api.User'
+
